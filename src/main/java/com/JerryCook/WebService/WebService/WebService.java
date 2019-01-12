@@ -35,7 +35,7 @@ public class WebService {
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
 				CoalAnnotation ca = new CoalAnnotation();
-				ca.setId(rs.getInt(1));
+				ca.setId(rs.getDouble(1));
 				ca.setStockpile(rs.getString(2));
 				ca.setCompany(rs.getString(3));
 				ca.setSource(rs.getString(4));
@@ -55,7 +55,7 @@ public class WebService {
 	
 	@POST
 	@Path("addAnnot")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Consumes("application/json")
 	public void addAnnot(String inString)
 	{
 		Gson gson = new GsonBuilder().create();
@@ -66,7 +66,7 @@ public class WebService {
 		try(Connection con = dh.getConnection())
 		{
 			PreparedStatement ps = con.prepareStatement(sql);
-			ps.setInt(1, ca.id);
+			ps.setDouble(1, ca.id);
 			ps.setString(2,ca.stockpile);
 			ps.setString(3, ca.company);
 			ps.setString(4, ca.source);
@@ -84,20 +84,17 @@ public class WebService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void deleteAnnot(String inString)
 	{
+		
 		Gson gson = new GsonBuilder().create();
 		CoalAnnotation ca = gson.fromJson(inString, CoalAnnotation.class);
-		
-		String sql = "DELETE FROM coalannotationtable WHERE id = ?"+
-		" AND stockpile = ? AND company = ? AND source = ? AND latitude = ? AND longitude = ?";
+				
+		String sql = "DELETE FROM coalannotationtable WHERE latitude = ? AND longitude = ?";
 		try(Connection con = dh.getConnection())
 		{
 			PreparedStatement ps = con.prepareStatement(sql);
-			ps.setInt(1, ca.id);
-			ps.setString(2,ca.stockpile);
-			ps.setString(3, ca.company);
-			ps.setString(4, ca.source);
-			ps.setDouble(5, ca.latitude);
-			ps.setDouble(6, ca.longitude);
+			
+			ps.setDouble(1, ca.latitude);
+			ps.setDouble(2, ca.longitude);
 			ps.executeUpdate();
 			ps.close();
 		}catch(SQLException e) {

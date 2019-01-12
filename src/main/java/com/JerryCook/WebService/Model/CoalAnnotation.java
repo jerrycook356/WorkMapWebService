@@ -2,7 +2,7 @@ package com.JerryCook.WebService.Model;
 
 public class CoalAnnotation {
 
-	public int id;
+	public double id;
 	public String stockpile;
 	public String company;
 	public String source;
@@ -10,10 +10,10 @@ public class CoalAnnotation {
 	public double longitude;
 	
 	
-	public void setId(int id) {
+	public void setId(double id) {
 		this.id  = id;
 	}
-	public int getId() {
+	public double getId() {
 		return id;
 	}
 	
